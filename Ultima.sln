@@ -5,6 +5,13 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{F90C7607-ACEA-4B2C-9295-749EDF7EC28D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{344F5746-186D-48E9-99AD-02E893700BEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selenium", "Selenium\Selenium.csproj", "{B528F274-499E-4892-8F8C-1FF9F5C0685D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F90C7607-ACEA-4B2C-9295-749EDF7EC28D} = {F90C7607-ACEA-4B2C-9295-749EDF7EC28D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +22,16 @@ Global
 		{F90C7607-ACEA-4B2C-9295-749EDF7EC28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F90C7607-ACEA-4B2C-9295-749EDF7EC28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F90C7607-ACEA-4B2C-9295-749EDF7EC28D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B528F274-499E-4892-8F8C-1FF9F5C0685D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B528F274-499E-4892-8F8C-1FF9F5C0685D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B528F274-499E-4892-8F8C-1FF9F5C0685D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B528F274-499E-4892-8F8C-1FF9F5C0685D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B528F274-499E-4892-8F8C-1FF9F5C0685D} = {344F5746-186D-48E9-99AD-02E893700BEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A41A1392-DE41-4098-B314-9F4B1515A42C}
