@@ -13,6 +13,7 @@ namespace Ultima.Console
     {
         public static Assembly[] plugins;
 
+        public const string dllDirectory = "libs/";
         public const string pluginsDirectory = "plugins/";
         public const string configsDirectory = "configs/";
         public static void Load()
@@ -22,13 +23,16 @@ namespace Ultima.Console
             if (Directory.Exists(pluginsDirectory) == false)
             {
                 Directory.CreateDirectory(pluginsDirectory);
-                return;
             }
 
             if (Directory.Exists(configsDirectory) == false)
             {
                 Directory.CreateDirectory(configsDirectory);
-                return;
+            }
+
+            if (Directory.Exists(dllDirectory) == false)
+            {
+                Directory.CreateDirectory(dllDirectory);
             }
 
             var files = Directory.GetFiles(pluginsDirectory, "*.dll");
@@ -40,22 +44,23 @@ namespace Ultima.Console
                 plugins[i] = plugin;
             }
 
-            var target = typeof(ImportCore);
+            int count = plugins.Length;
+            Type[] classes = new Type[count];
+            for (int i = 0; i < count; i++)
+                classes[i] = plugins[i].GetType(nameof(ImportCore));
 
-            var classes =
-            from assembly in plugins
-            from type in assembly.GetTypes()
-            where target.IsAssignableFrom(type)
-            select type;
+            
 
+            classes = classes.OrderByDescending(T => T.GetMethod(nameof(ImportCore.Priority)).Invoke(null, null)).ToArray();
 
-            foreach(var instance in classes)
+            foreach (var instance in classes)
             {
                 var name = instance.Namespace;
+                System.Console.WriteLine(name);
+
 
                 var fieldInfo = typeof(ImportCore).GetField(nameof(ImportCore.ConfigDirectory));
                 fieldInfo.SetValue(instance, $"{configsDirectory}{name}");
-
 
                 var start = instance.GetMethod(nameof(ImportCore.Start));
                 start.Invoke(null, null);

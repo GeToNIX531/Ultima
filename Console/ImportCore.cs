@@ -24,5 +24,7 @@ namespace Ultima.Console
         }
 
         public static void InstallConfigs() => throw new Exception("Не установлены конфиги!");
+
+        public static int Priority() => 0;
     }
 }
