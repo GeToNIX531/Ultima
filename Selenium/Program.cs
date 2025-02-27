@@ -55,28 +55,37 @@ namespace Ultima.Selenium
 
         static IWebDriver driver;
         static string chromeDir;
-        static ChromeOptions chromeOptions;
+        static ChromeOptions m_Options;
         public override void Start()
         {
-            chromeOptions = new ChromeOptions();
-            chromeOptions.AddUserProfilePreference("download.default_directory", $"{CFGDirectory}/ChromeDriver/");
-            chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
-            chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
-            chromeOptions.AddArguments("disable-infobars");
-
-
+            m_Options = new ChromeOptions();
+            m_Options.AddUserProfilePreference("download.default_directory", $"{CFGDirectory}/ChromeDriver/");
+            m_Options.AddUserProfilePreference("disable-popup-blocking", "true");
+            m_Options.AddUserProfilePreference("download.prompt_for_download", false);
             chromeDir = $"{CFGDirectory}/";
-           
+            m_Options.AddArguments("disable-infobars");
+            m_Options.AddArguments("--disable-dev-shm-usage");
         }
 
         public static void OpenWebBrowser()
         {
             try
             {
-                driver = new ChromeDriver(chromeDir, chromeOptions);
+                driver = new ChromeDriver(chromeDir, m_Options, TimeSpan.FromSeconds(180));
                 GoToUrl("https://github.com/GeToNIX531/Ultima");
             }
             catch (Exception e) { Console.Logger.WriteLine(e.Message, ConsoleColor.Red); }
+        }
+
+        public static void SetDirectory(string Name)
+        {
+            if (Directory.Exists($"{chromeDir}{Name}/") == false)
+                Directory.CreateDirectory($"{chromeDir}{Name}/");
+
+            m_Options.AddArgument($"--user-data-dir={Directory.GetCurrentDirectory()}/{chromeDir}{Name}/");
+            m_Options.AddArgument("--disable-extensions");
+            m_Options.AddArguments("--no-sandbox");
+            m_Options.AddArguments("--remote-debugging-pipe");
         }
 
         public static void GoToUrl(string Url) => driver?.Navigate().GoToUrl(Url);

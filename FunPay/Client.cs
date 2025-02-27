@@ -55,6 +55,8 @@ namespace FunPay
         public override void Start()
         {
             Console.Logger.WriteLine("Запуск FunPay", ConsoleColor.Cyan);
+
+            WebBrowser.SetDirectory(nameof(FunPay));
             WebBrowser.OpenWebBrowser();
             WebBrowser.GoToUrl("https://funpay.com/");
         }
