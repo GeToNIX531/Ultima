@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,6 +57,7 @@ namespace Ultima.Selenium
         static IWebDriver driver;
         static string chromeDir;
         static ChromeOptions m_Options;
+        static WebDriverWait wait;
         public override void Start()
         {
             m_Options = new ChromeOptions();
@@ -71,7 +73,10 @@ namespace Ultima.Selenium
         {
             try
             {
-                driver = new ChromeDriver(chromeDir, m_Options, TimeSpan.FromSeconds(180));
+                var timeout = TimeSpan.FromSeconds(180);
+
+                driver = new ChromeDriver(chromeDir, m_Options, timeout);
+                wait = new WebDriverWait(driver, timeout);
                 GoToUrl("https://github.com/GeToNIX531/Ultima");
             }
             catch (Exception e) { Console.Logger.WriteLine(e.Message, ConsoleColor.Red); }
@@ -89,5 +94,35 @@ namespace Ultima.Selenium
         }
 
         public static void GoToUrl(string Url) => driver?.Navigate().GoToUrl(Url);
+        public static void Back() => driver?.Navigate().Back();
+
+        public static IWebElement[] FindElements(By by) => driver.FindElements(by).ToArray();
+        public static bool FindElement(By by, out IWebElement Element)
+        {
+            var elements = FindElements(by);
+            if (elements == null || elements.Length == 0)
+            {
+                Element = null;
+                return false;
+            }
+
+            Element = elements[0];
+            return true;
+        }
+
+
+        public static IWebElement[] waitFindElements(By by) => wait.Until(drv => drv.FindElements(by)).ToArray();
+        public static bool waitFindElement(By by, out IWebElement Element)
+        {
+            var elements = waitFindElements(by);
+            if (elements == null || elements.Length == 0)
+            {
+                Element = null;
+                return false;
+            }
+
+            Element = elements[0];
+            return true;
+        }
     }
 }
